@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import Messages from "../../../Messages";
+import Messages from "../../Messages";
 
 export class HttpError extends Error {
   status: number;

@@ -4,7 +4,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 import userRouter from "./routes/userRoutes";
-import { ErrorMiddleware } from "./controllers/middleware/error";
+import { ErrorMiddleware } from "./middleware/error";
 
 const startBackend = async () => {
   const app: Express = express();

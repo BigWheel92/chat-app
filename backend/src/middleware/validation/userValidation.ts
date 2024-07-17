@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { string, object, ValidationError } from "yup";
 import { HttpError } from "../error";
-import Messages from "../../../Messages";
+import Messages from "../../Messages";
 
 const signupSchema = object().shape({
   username: string().min(4).required().label("Username"),

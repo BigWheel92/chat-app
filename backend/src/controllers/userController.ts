@@ -4,7 +4,7 @@ import { UserModelHelper } from "../db/helpers/userHelper";
 import Messages from "../Messages";
 
 import "express-async-errors";
-import { HttpError } from "./middleware/error";
+import { HttpError } from "../middleware/error";
 
 class UserController {
   static signup = async (req: Request, res: Response) => {

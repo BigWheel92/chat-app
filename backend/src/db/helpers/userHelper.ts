@@ -5,6 +5,9 @@ export class UserModelHelper {
   static getUserByUserNameOrEmail = async (username: string, email: string) =>
     await UserModel.findOne({ $or: [{ username }, { email }] });
 
+  static getUserByEmail = async (email: string) =>
+    await UserModel.findOne({ email });
+
   static addNewUser = async (
     username: string,
     email: string,

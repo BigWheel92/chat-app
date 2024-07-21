@@ -43,12 +43,14 @@ const Input = ({
         {type === "password" &&
           (showPassword ? (
             <EyeIcon
+              className="hover:cursor-pointer"
               onClick={() => {
                 setShowPassword(false);
               }}
             />
           ) : (
             <EyeIconOff
+              className="hover:cursor-pointer"
               onClick={() => {
                 setShowPassword(true);
               }}

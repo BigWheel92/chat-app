@@ -1,12 +1,19 @@
+import "./App.css";
+import Login from "./components/Login";
+import Signup from "./components/Signup";
+import routes from "./constants/routes";
 
-import './App.css';
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 function App() {
   return (
-    <h1 className="text-3xl font-bold underline text-red-600">
-      Simple React Typescript Tailwind Sample
-    </h1>
-  );  
+    <BrowserRouter>
+      <Routes>
+        <Route path={routes.login} element={<Login />} />
+        <Route path={routes.signup} element={<Signup />} />
+      </Routes>
+    </BrowserRouter>
+  );
 }
 
 export default App;

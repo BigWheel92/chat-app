@@ -18,7 +18,12 @@ const signupSchema = object({
     ),
   email: string().matches(regex.email, "Please provide a valid email."),
 
-  password: string().required("Please provide password."),
+  password: string()
+    .required("Please provide password.")
+    .matches(
+      regex.passwordRegex,
+      "Password must contain at least 8 characters with at least one uppercase letter, one lowercase letter, one digit, and one special character."
+    ),
   confirmPassword: string()
     .oneOf([ref("password")], "Passwords do not match.")
     .required("Please confirm your password."),
@@ -58,7 +63,7 @@ const Signup = () => {
 
   return (
     <div className="w-screen h-screen bg-blue-600 flex items-center justify-center">
-      <div className="flex flex-col items-center justify-center bg-white gap-y-4 w-fit h-fit p-4 rounded">
+      <div className="flex flex-col items-center justify-center w-96 bg-white gap-y-4 p-4 rounded">
         <label className="font-semibold text-2xl">Signup</label>
 
         <Input

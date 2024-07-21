@@ -19,11 +19,11 @@ const Input = ({
 }) => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   return (
-    <div className="flex flex-col gap-y-1">
+    <div className="flex flex-col gap-y-1 w-full">
       <div
         className={`flex justify-between border border-solid ${
           error ? "border-red-500" : "border-gray-500"
-        } w-72 px-2 py-1 rounded outline-blue-400`}
+        } w-full px-2 py-1 rounded outline-blue-400`}
       >
         <input
           onChange={(e) => {

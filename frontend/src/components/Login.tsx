@@ -43,7 +43,7 @@ const Login = () => {
 
   return (
     <div className="w-screen h-screen bg-blue-600 flex items-center justify-center">
-      <div className="flex flex-col items-center justify-center bg-white gap-y-4 w-fit h-fit p-4 rounded">
+      <div className="flex flex-col items-center justify-center w-96 bg-white gap-y-4 p-4 rounded">
         <label className="font-semibold text-2xl">Login</label>
         <Input
           onChange={(email) =>

@@ -31,7 +31,7 @@ type SignupDataType = {
   confirmPassword: string;
 };
 
-const defaultSignupData = {
+const defaultData = {
   username: "",
   email: "",
   password: "",
@@ -40,10 +40,10 @@ const defaultSignupData = {
 
 const Signup = () => {
   const [signupData, setSignupCredentials] =
-    useState<SignupDataType>(defaultSignupData);
+    useState<SignupDataType>(defaultData);
 
   const [validationErrors, setValidationErrors] =
-    useState<SignupDataType>(defaultSignupData);
+    useState<SignupDataType>(defaultData);
 
   const onSubmit = () => {
     signupSchema

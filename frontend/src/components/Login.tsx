@@ -6,7 +6,7 @@ import Input from "components/common/Input";
 import Button from "components/common/Button";
 import routes from "constants/routes";
 import regex from "constants/regex";
-import YupHelper from "helpers/yupHelper";
+import YupHelper from "helpers/yup";
 
 const loginCredentialsSchema = object({
   email: string().matches(regex.email, "Please provide a valid email."),

@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { ReactComponent as EyeIcon } from "../../assets/svgs/eye.svg";
-import { ReactComponent as EyeIconOff } from "../../assets/svgs/eye-off.svg";
+import { ReactComponent as EyeIcon } from "assets/svgs/eye.svg";
+import { ReactComponent as EyeIconOff } from "assets/svgs/eye-off.svg";
 
 const Input = ({
   onChange,

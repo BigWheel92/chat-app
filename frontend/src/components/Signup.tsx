@@ -2,11 +2,11 @@ import { Link } from "react-router-dom";
 import { useState } from "react";
 import { ref, object, string, ValidationError } from "yup";
 
-import Input from "./common/Input";
-import Button from "./common/Button";
-import routes from "../constants/routes";
-import regex from "../constants/regex";
-import YupHelper from "../helpers/yupHelper";
+import Input from "components/common/Input";
+import Button from "components/common/Button";
+import routes from "constants/routes";
+import regex from "constants/regex";
+import YupHelper from "helpers/yupHelper";
 
 const signupSchema = object({
   username: string()

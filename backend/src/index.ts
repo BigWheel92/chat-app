@@ -1,13 +1,15 @@
 import express, { Express } from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
-dotenv.config();
+import cors from "cors";
 
 import userRouter from "./routes/userRoutes";
 import { ErrorMiddleware } from "./middleware/error";
 
+dotenv.config();
 const startBackend = async () => {
   const app: Express = express();
+  app.use(cors());
   app.use(express.json());
 
   const apiServerPort = process.env.API_SERVER_PORT || 8000;

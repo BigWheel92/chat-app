@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { object, string, ValidationError } from "yup";
 
 import Input from "components/common/Input";
@@ -7,6 +7,9 @@ import Button from "components/common/Button";
 import routes from "constants/routes";
 import regex from "constants/regex";
 import YupHelper from "helpers/yup";
+import setToast, { ToastType } from "helpers/setToast";
+import { login, selectAuth } from "reduxStore/slices/auth";
+import { useAppDispatch, useAppSelector } from "reduxStore";
 
 const loginCredentialsSchema = object({
   email: string().matches(regex.email, "Please provide a valid email."),
@@ -29,16 +32,36 @@ const Login = () => {
 
   const [validationErrors, setValidationErrors] =
     useState<LoginCredentialsDataType>(defaultData);
+  const dispatch = useAppDispatch();
+  const {
+    isSuccess: isLoginSuccess,
+    error: loginError,
+    isError: isLoginError,
+    isLoading: isLoginInProgress,
+  } = useAppSelector(selectAuth);
 
-  const onSubmit = () => {
-    loginCredentialsSchema
-      .validate(loginCredentials, { abortEarly: false })
-      .then(() => {})
-      .catch((error: ValidationError) => {
-        setValidationErrors(
-          YupHelper.extractValidationErrors<LoginCredentialsDataType>(error)
-        );
+  useEffect(() => {
+    if (isLoginSuccess) {
+    }
+    if (isLoginError) {
+      setToast(loginError, ToastType.ERROR);
+    }
+  }, [isLoginSuccess, isLoginError, loginError]);
+
+  const onSubmit = async () => {
+    try {
+      await loginCredentialsSchema.validate(loginCredentials, {
+        abortEarly: false,
       });
+      dispatch(login(loginCredentials));
+    } catch (error) {
+      //yup validation error
+      setValidationErrors(
+        YupHelper.extractValidationErrors<LoginCredentialsDataType>(
+          error as ValidationError
+        )
+      );
+    }
   };
 
   return (
@@ -69,7 +92,7 @@ const Login = () => {
             setValidationErrors((prev) => ({ ...prev, password: "" }))
           }
         />
-        <Button text="Login" onClick={onSubmit} />
+        <Button text="Login" onClick={onSubmit} disabled={isLoginInProgress} />
 
         <span>
           Don't have an account?{" "}

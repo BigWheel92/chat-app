@@ -1,8 +1,10 @@
 import { useDispatch, useSelector } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
 
+import auth from "reduxStore/slices/auth";
+
 export const store = configureStore({
-  reducer: {},
+  reducer: { auth },
 });
 
 // Infer the `RootState` and `AppDispatch` types from the store itself

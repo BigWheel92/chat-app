@@ -6,7 +6,8 @@ import Messages from "../Messages";
 
 import "express-async-errors";
 import { HttpError } from "../middleware/error";
-import { generateAccessToken } from "../middleware/auth";
+import JwtService from "../services/JwtService";
+import EmailService from "../services/EmailService";
 
 class UserController {
   static signup = async (req: Request, res: Response) => {
@@ -26,8 +27,21 @@ class UserController {
       throw new HttpError(409, errorMessage);
     }
 
-    await UserModelHelper.addNewUser(username, email, password);
-    return res.status(201).json({ message: Messages.USER_ADDED });
+    const newUser = await UserModelHelper.addNewUser(username, email, password);
+    const { emailVerificationToken, expiresAt } =
+      JwtService.generateEmailVerificationToken(newUser._id);
+    const emailBody = `Hi,\nTo complete your signup process on chatapp, please verify your email by clicking on this link: ${
+      process.env.FRONT_END_URL
+    }/verify/${emailVerificationToken}.\n(The link will expire on ${new Date(
+      expiresAt
+    ).toUTCString()})). If you don't verify your email by this time, your data on chatapp will be removed.`;
+
+    EmailService.sendEmail(
+      email,
+      "Signup on Chatapp - Verification",
+      emailBody
+    );
+    return res.status(201).json({ message: Messages.USER_SIGNUP_SUCCESS });
   };
   static login = async (req: Request, res: Response) => {
     const { email, password } = req.body;
@@ -35,6 +49,8 @@ class UserController {
     const user = await UserModelHelper.getUserByEmail(email);
     if (!user) {
       throw new HttpError(401, Messages.INVALID_CREDENTIALS);
+    } else if (!user.isVerified) {
+      throw new HttpError(401, Messages.USER_UNVERIFIED);
     } else {
       const isPasswordCorrect = await bcrypt.compare(
         password,
@@ -43,7 +59,7 @@ class UserController {
       if (!isPasswordCorrect) {
         throw new HttpError(401, Messages.INVALID_CREDENTIALS);
       } else {
-        const { accessToken, expiresAt } = generateAccessToken(
+        const { accessToken, expiresAt } = JwtService.generateAccessToken(
           user._id,
           user.email,
           user.username

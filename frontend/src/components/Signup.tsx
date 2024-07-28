@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { ref, object, string, ValidationError } from "yup";
 
@@ -7,6 +7,9 @@ import Button from "components/common/Button";
 import routes from "constants/routes";
 import regex from "constants/regex";
 import YupHelper from "helpers/yup";
+import ajaxRequest, { Methods } from "helpers/ajaxRequest";
+import setToast, { ToastType } from "helpers/setToast";
+import HttpError from "constants/HttpError";
 
 const signupSchema = object({
   username: string()
@@ -50,15 +53,26 @@ const Signup = () => {
   const [validationErrors, setValidationErrors] =
     useState<SignupDataType>(defaultData);
 
-  const onSubmit = () => {
-    signupSchema
-      .validate(signupData, { abortEarly: false })
-      .then(() => {})
-      .catch((error: ValidationError) => {
-        setValidationErrors(
-          YupHelper.extractValidationErrors<SignupDataType>(error)
-        );
-      });
+  const navigate = useNavigate();
+  const onSubmit = async () => {
+    try {
+      await signupSchema.validate(signupData, { abortEarly: false });
+      const { confirmPassword, ...signupDataToSend } = signupData;
+      await ajaxRequest("api/user/signup", Methods.POST, signupDataToSend);
+
+      setToast(
+        "Signup successful. Please verify your email to login",
+        ToastType.SUCCESS
+      );
+      navigate(routes.login);
+    } catch (error) {
+      if (error instanceof ValidationError)
+        setValidationErrors(YupHelper.extractValidationErrors(error));
+      else {
+        const httpError = error as HttpError;
+        setToast(httpError.message, ToastType.ERROR);
+      }
+    }
   };
 
   return (

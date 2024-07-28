@@ -50,8 +50,8 @@ const auth = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    logout: (state) => {
-      state = initialState;
+    resetAuth: (state) => {
+      Object.assign(state, initialState);
     },
   },
   extraReducers: (builder) => {
@@ -89,4 +89,4 @@ const auth = createSlice({
 export const selectAuth = (state: RootState) => state.auth;
 
 export default auth.reducer;
-export const { logout } = auth.actions;
+export const { resetAuth } = auth.actions;

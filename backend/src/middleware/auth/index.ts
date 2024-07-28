@@ -20,3 +20,19 @@ export const generateAccessToken = (
 
   return { accessToken, expiresAt };
 };
+
+export const generateEmailVerificationToken = (
+  userId
+): { emailVerificationToken: string; expiresAt: string } => {
+  const emailVerificationToken = jwt.sign(
+    {
+      userId,
+    },
+    process.env.JWT_EMAIL_VERIFICATION_TOKEN_SECRET as string,
+    { expiresIn: process.env.JWT_EMAIL_VERIFICATION_TOKEN_EXPIRY }
+  );
+  const decoded = jwt.decode(emailVerificationToken) as { exp: number };
+  const expiresAt = new Date(decoded.exp * 1000).toISOString(); // Convert to ISO string
+
+  return { emailVerificationToken, expiresAt };
+};

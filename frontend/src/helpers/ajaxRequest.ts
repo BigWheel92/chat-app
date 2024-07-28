@@ -5,6 +5,11 @@ export const Methods = {
   POST: "POST",
 } as const;
 
+export type AjaxRequestSuccessResponse = {
+  status: number;
+  data: Record<string, any>;
+};
+
 const ajaxRequest = async (
   url: string,
   method: (typeof Methods)[keyof typeof Methods],
@@ -19,10 +24,7 @@ const ajaxRequest = async (
   }
   const baseUrl = `${process.env.REACT_APP_API_SERVER_URL}:${process.env.REACT_APP_API_SERVER_PORT}`;
   const fullUrl = `${baseUrl}/${url}`;
-  let returnResponse: {
-    status?: number;
-    data?: Record<string, any>;
-  } = {};
+
   try {
     const response = await fetch(fullUrl, options);
     const data = await response.json();
@@ -30,8 +32,10 @@ const ajaxRequest = async (
     if (!response.ok) {
       throw new HttpError(response.status, data.message, data.errors);
     }
-
-    returnResponse = { status: response.status, data };
+    let returnResponse: AjaxRequestSuccessResponse = {
+      status: response.status,
+      data,
+    };
     return returnResponse;
   } catch (error) {
     if (error instanceof HttpError) throw error;

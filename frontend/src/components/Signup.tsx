@@ -49,6 +49,8 @@ const defaultData = {
 const Signup = () => {
   const [signupData, setSignupCredentials] =
     useState<SignupDataType>(defaultData);
+  const [isSignupApiCallInProgress, setIsSignupApiCallInProgress] =
+    useState(false);
 
   const [validationErrors, setValidationErrors] =
     useState<SignupDataType>(defaultData);
@@ -58,6 +60,7 @@ const Signup = () => {
     try {
       await signupSchema.validate(signupData, { abortEarly: false });
       const { confirmPassword, ...signupDataToSend } = signupData;
+      setIsSignupApiCallInProgress(true);
       await ajaxRequest("api/user/signup", Methods.POST, signupDataToSend);
 
       setToast(
@@ -72,6 +75,8 @@ const Signup = () => {
         const httpError = error as HttpError;
         setToast(httpError.message, ToastType.ERROR);
       }
+    } finally {
+      setIsSignupApiCallInProgress(false);
     }
   };
 
@@ -130,7 +135,11 @@ const Signup = () => {
             setValidationErrors((prev) => ({ ...prev, confirmPassword: "" }))
           }
         />
-        <Button text="Signup" onClick={onSubmit} />
+        <Button
+          text="Signup"
+          onClick={onSubmit}
+          disabled={isSignupApiCallInProgress}
+        />
 
         <span>
           Already have an account?{" "}

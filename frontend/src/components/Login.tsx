@@ -8,7 +8,7 @@ import routes from "constants/routes";
 import regex from "constants/regex";
 import YupHelper from "helpers/yup";
 import setToast, { ToastType } from "helpers/setToast";
-import { login, selectAuth } from "reduxStore/slices/auth";
+import { login, selectAuth, resetAuth } from "reduxStore/slices/auth";
 import { useAppDispatch, useAppSelector } from "reduxStore";
 
 const loginCredentialsSchema = object({
@@ -45,7 +45,10 @@ const Login = () => {
     }
     if (isLoginError) {
       setToast(loginError, ToastType.ERROR);
+      dispatch(resetAuth());
     }
+
+    //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoginSuccess, isLoginError, loginError]);
 
   const onSubmit = async () => {

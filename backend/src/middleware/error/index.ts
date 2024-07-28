@@ -35,7 +35,6 @@ export class ErrorMiddleware {
     if (error.errors) console.error(error.errors);
 
     return res.json({
-      status: error.status || 500,
       message: res.statusCode === 500 ? Messages.SERVER_ERROR : error.message,
       ...(error.errors && { errors: error.errors }),
     });

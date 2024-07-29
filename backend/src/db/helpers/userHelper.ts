@@ -1,5 +1,6 @@
 import bcrypt from "bcrypt";
 import UserModel from "../models/userModel";
+import { Types } from "mongoose";
 
 export class UserModelHelper {
   static getUserByUserNameOrEmail = async (username: string, email: string) =>
@@ -22,4 +23,7 @@ export class UserModelHelper {
     });
     return user;
   };
+
+  static verifyUser = async (userId: Types.ObjectId) =>
+    await UserModel.updateOne({ _id: userId }, { $set: { verified: true } });
 }

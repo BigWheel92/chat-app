@@ -8,6 +8,10 @@ class Messages {
   static INVALID_CREDENTIALS = " invalid credentials";
   static LOGIN_VALIDATION_ERROR = "login validation error";
   static USER_UNVERIFIED = "Please verfiy your email.";
+  static USER_VERIFIED = "User verified successfully.";
+  static VERIFICATION_LINK_EXPIRED = "Verification link has expired.";
+  static INVALID_VERIFICATION_LINK = "The verification link is invalid.";
+  static USER_ALREADY_VERIFIED = "User already verified.";
 }
 
 export default Messages;

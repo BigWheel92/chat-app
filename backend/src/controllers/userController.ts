@@ -1,5 +1,6 @@
 import bcrypt from "bcrypt";
 import { Request, Response } from "express";
+import jwt from "jsonwebtoken";
 
 import { UserModelHelper } from "../db/helpers/userHelper";
 import Messages from "../Messages";
@@ -8,6 +9,7 @@ import "express-async-errors";
 import { HttpError } from "../middleware/error";
 import JwtService from "../services/JwtService";
 import EmailService from "../services/EmailService";
+import { Types } from "mongoose";
 
 class UserController {
   static signup = async (req: Request, res: Response) => {
@@ -43,13 +45,14 @@ class UserController {
     );
     return res.status(201).json({ message: Messages.USER_SIGNUP_SUCCESS });
   };
+
   static login = async (req: Request, res: Response) => {
     const { email, password } = req.body;
 
     const user = await UserModelHelper.getUserByEmail(email);
     if (!user) {
       throw new HttpError(401, Messages.INVALID_CREDENTIALS);
-    } else if (!user.isVerified) {
+    } else if (!user.verified) {
       throw new HttpError(401, Messages.USER_UNVERIFIED);
     } else {
       const isPasswordCorrect = await bcrypt.compare(
@@ -76,6 +79,34 @@ class UserController {
         });
       }
     }
+  };
+
+  static verify = async (req: Request, res: Response) => {
+    const token: string = req.params.token;
+
+    let userId: Types.ObjectId | null = null;
+    try {
+      type JwtPayload = {
+        userId: Types.ObjectId;
+      };
+      const decoded = jwt.verify(
+        token,
+        process.env.JWT_EMAIL_VERIFICATION_TOKEN_SECRET as string
+      ) as JwtPayload;
+      userId = decoded.userId;
+    } catch (error) {
+      if (error instanceof jwt.TokenExpiredError) {
+        throw new HttpError(401, Messages.VERIFICATION_LINK_EXPIRED);
+      } else {
+        throw new HttpError(401, Messages.INVALID_VERIFICATION_LINK);
+      }
+    }
+
+    const updatedRes = await UserModelHelper.verifyUser(userId);
+    //if the user is already verified
+    if (updatedRes.modifiedCount === 0)
+      throw new HttpError(409, Messages.USER_ALREADY_VERIFIED);
+    return res.status(200).json({ message: Messages.USER_VERIFIED });
   };
 }
 

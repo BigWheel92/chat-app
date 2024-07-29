@@ -1,15 +1,14 @@
 import bcrypt from "bcrypt";
 import { Request, Response } from "express";
 import jwt from "jsonwebtoken";
+import { Types } from "mongoose";
+import "express-async-errors";
 
 import { UserModelHelper } from "../db/helpers/userHelper";
 import Messages from "../Messages";
-
-import "express-async-errors";
 import { HttpError } from "../middleware/error";
 import JwtService from "../services/JwtService";
 import EmailService from "../services/EmailService";
-import { Types } from "mongoose";
 
 class UserController {
   static signup = async (req: Request, res: Response) => {

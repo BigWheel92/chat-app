@@ -1,6 +1,7 @@
 import bcrypt from "bcrypt";
-import UserModel from "../models/userModel";
 import { Types } from "mongoose";
+
+import UserModel from "../models/userModel";
 
 export class UserModelHelper {
   static getUserByUserNameOrEmail = async (username: string, email: string) =>

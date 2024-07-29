@@ -95,7 +95,12 @@ const Login = () => {
             setValidationErrors((prev) => ({ ...prev, password: "" }))
           }
         />
-        <Button text="Login" onClick={onSubmit} disabled={isLoginInProgress} />
+        <Button
+          text="Login"
+          onClick={onSubmit}
+          disabled={isLoginInProgress}
+          buttonClasses="w-28"
+        />
 
         <span>
           Don't have an account?{" "}

@@ -9,7 +9,7 @@ const Button = ({
 }) => {
   return (
     <button
-      className={`w-32 h-10 rounded bg-blue-500 text-white ${
+      className={`p-2 rounded bg-blue-500 text-white ${
         disabled ? "bg-gray-500 cursor-not-allowed" : ""
       }`}
       onClick={onClick}

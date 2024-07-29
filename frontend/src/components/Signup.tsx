@@ -139,6 +139,7 @@ const Signup = () => {
           text="Signup"
           onClick={onSubmit}
           disabled={isSignupApiCallInProgress}
+          buttonClasses="w-28"
         />
 
         <span>

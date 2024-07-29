@@ -10,5 +10,10 @@ userRouter.post(
   UserController.signup
 );
 userRouter.post("/login", UserValidation.validateLogin, UserController.login);
+userRouter.get(
+  "/verify/:token",
+
+  UserController.verify
+);
 
 export default userRouter;

@@ -1,4 +1,6 @@
 import bcrypt from "bcrypt";
+import { Types } from "mongoose";
+
 import UserModel from "../models/userModel";
 
 export class UserModelHelper {
@@ -22,4 +24,7 @@ export class UserModelHelper {
     });
     return user;
   };
+
+  static verifyUser = async (userId: Types.ObjectId) =>
+    await UserModel.updateOne({ _id: userId }, { $set: { verified: true } });
 }
